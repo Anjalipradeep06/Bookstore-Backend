@@ -8,7 +8,7 @@ import {
   getAllOrders,
   updateOrderStatus,
   adminGetAllBooks,
-  deleteBook,
+  deleteBook,updateBook
 } from "../controllers/admin/adminController.js";
 
 import {
@@ -120,6 +120,16 @@ router.post(
   adminOnly,
   upload.single("image"),
   createBook
+);
+
+
+// route — add under the BOOKS section
+router.put(
+  "/books/:id",
+  protect,
+  adminOnly,
+  upload.single("image"),
+  updateBook
 );
 
 router.delete(

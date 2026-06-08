@@ -149,3 +149,29 @@ export const deleteBook = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+// UPDATE BOOK
+export const updateBook = async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) return res.status(404).json({ success: false, message: 'Book not found' });
+
+    const { title, author, category, description, price } = req.body;
+
+    if (title) book.title = title;
+    if (author) book.author = author;
+    if (category) book.category = category;
+    if (description) book.description = description;
+    if (price) book.price = price;
+
+    // Only update image if a new one was uploaded
+    if (req.file) {
+      book.imageUrl = req.file.path; // adjust to match your upload field (e.g. req.file.location for S3)
+    }
+
+    await book.save();
+
+    return res.status(200).json({ success: true, message: 'Book updated successfully', data: book });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
