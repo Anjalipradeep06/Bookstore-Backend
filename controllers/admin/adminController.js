@@ -131,8 +131,19 @@ export const updateOrderStatus = async (req, res) => {
 // ADMIN GET ALL BOOKS
 export const adminGetAllBooks = async (req, res) => {
   try {
-    const books = await Book.find().sort({ createdAt: -1 });
-    return res.status(200).json({ success: true, totalBooks: books.length, data: books });
+     const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+    
+        const skip = (page - 1) * limit;
+    
+        const books = await Book.find()
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit);
+    const totalbooks = await Book.countDocuments();
+    return res.status(200).json({ success: true, totalBooks: books.length, data: books,currentPage: page,
+      totalPages: Math.ceil(totalbooks / limit),
+      totalbooks });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
