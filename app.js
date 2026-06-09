@@ -25,10 +25,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade'); 
 
 // Middlewares
-app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true
-}));app.use(express.json());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://bookstore-frontend-tawny-tau.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
